@@ -1,0 +1,33 @@
+.formLink{
+	font-size: 20px;
+	padding: 10px;
+	text-decoration: none;
+}
+
+.mainHeading{
+	color:orange;
+	text-align: right;
+	font-size: 50px;
+	margin-right: 100px;
+}
+
+.mainDiv{
+	display: flex; 
+	justify-content: space-evenly;
+	padding-top: 10px;
+}
+
+.info{
+	padding:10px;
+	font-family:sans-serif;
+	text-align: justify;
+}
+
+.topicHeading{
+	text-align:center;
+	color:orange;
+}
+
+.link{
+	text-underline-position: below;
+}

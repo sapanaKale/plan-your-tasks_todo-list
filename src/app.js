@@ -68,6 +68,28 @@ const renderFile = function (req, res) {
 	});
 };
 
+const renderHomePage = function (req, res, next) {
+	if (req.headers['cookie']) {
+		let cookie = getCookie(req);
+		let userHomePage = fs.readFileSync('./public/userHomePage.html', 'utf8');
+		userHomePage = userHomePage.replace('##username##', cookie);
+		return sendContent(userHomePage, res);
+	};
+	sendContent(fs.readFileSync('./public/index.html', 'utf8'), res);
+};
+
+const renderUsersName = function (req, res, next) {
+	sendContent(JSON.stringify(Object.keys(usersDetails)), res);
+};
+
+const signUp = function (req, res, next) {
+	let { userName, email, password } = readArgs(req.body);
+	usersDetails[userName] = { email, password };
+	let details = JSON.stringify(usersDetails);
+	fs.writeFile('./private/usersDetails.json', details, () => { });
+	renderLogin(req, res, next);
+};
+
 const renderLogin = function (req, res, next) {
 	let loginPage = fs.readFileSync('./public/loginPage.html', 'utf8');
 	loginPage = loginPage.replace("#msg#", "");
@@ -86,40 +108,59 @@ const isValidUser = function (userName, password) {
 	return isValidUserName(userName) && isValidPassword(userName, password);
 };
 
-const loginPageWithError = function(res){
+const loginPageWithError = function (res) {
 	let loginPage = fs.readFileSync('./public/loginPage.html', 'utf8');
 	loginPage = loginPage.replace("#msg#", "invalid username or password");
 	sendContent(loginPage, res);
-}
+};
+
+const setCookie = function (res, cookie) {
+	res.setHeader('Set-Cookie', "username=" + cookie);
+};
+
+const getCookie = function (req) {
+	return req.headers['cookie'].split("=")[1];
+};
 
 const renderUserHomePage = function (req, res, next) {
 	let { userName, password } = readArgs(req.body);
 	let userHomePage = fs.readFileSync('./public/userHomePage.html', 'utf8');
 	if (isValidUser(userName, password)) {
 		userHomePage = userHomePage.replace('##username##', userName);
+		setCookie(res, userName);
 		return sendContent(userHomePage, res);
 	};
 	loginPageWithError(res);
 };
 
-const signUp = function (req, res, next) {
-	let { userName, email, password} = readArgs(req.body);
-	usersDetails[userName] = { email, password };
-	let details = JSON.stringify(usersDetails);
-	fs.writeFile('./private/usersDetails.json', details, () => { });
-	renderLogin(req, res, next);
-};
-
-const renderUsersName = function (req, res, next) {
-	sendContent(JSON.stringify(Object.keys(usersDetails)), res);
+const renderLogOut = function (req, res, next) {
+	res.setHeader("Set-Cookie", "username=; expires=" + new Date().toUTCString());
+	redirect(res, '/');
 };
 
 app.use(readBody);
 app.use(logRequest);
-app.get('/loginPage.html', renderLogin);
-app.post('/login', renderUserHomePage);
+app.get('/', renderHomePage);
 app.get('/usersName', renderUsersName);
 app.post('/signUp', signUp);
+app.get('/loginPage.html', renderLogin);
+app.post('/login', renderUserHomePage);
+app.post('/logout', renderLogOut);
 app.use(renderFile);
 
-module.exports = app.handleRequest.bind(app);
+const requestHandler = app.handleRequest.bind(app);
+
+module.exports = {
+	requestHandler,
+	logRequest,
+	readArgs,
+	readBody,
+	renderFile,
+	renderLogin,
+	loginPageWithError,
+	renderUserHomePage,
+	renderUsersName,
+	renderHomePage,
+	renderLogOut,
+	signUp
+};

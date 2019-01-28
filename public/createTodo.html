@@ -3,8 +3,8 @@
 
 <head>
 	<title id="title">##title##</title>
-	<link rel="stylesheet" type="text/css" media="screen" href="main.css" />
-	<script src="main.js"></script>
+	<link rel="stylesheet" type="text/css" media="screen" href="/main.css" />
+	<script src="/main.js"></script>
 </head>
 
 <body>
@@ -15,9 +15,10 @@
 		<input type="text" id="myInput" placeholder="list items...">
 		<button onclick="addItems()">Add</button>
 		<ul id="myLI">
+			<div>##listItems##</div>
 		</ul>
 	</div>
-	<button onclick="saveList()">Save</button>
-	<button><a href="/userHomePage" style="text-decoration: none">Done</a></button>
+	<a href="/userHomePage" style="text-decoration: none" onclick="saveList()"><button>Save</button></a>
 </body>
+
 </html>

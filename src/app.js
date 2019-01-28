@@ -1,5 +1,6 @@
 const fs = require('fs');
 const usersDetails = JSON.parse(fs.readFileSync('./private/usersDetails.json'));
+const usersData = JSON.parse(fs.readFileSync('./private/usersData.json'));
 
 const App = require('./createApp');
 const app = new App();
@@ -70,7 +71,7 @@ const renderFile = function (req, res) {
 
 const renderHomePage = function (req, res, next) {
 	if (req.headers['cookie']) {
-		let cookie = getCookie(req);
+		let cookie = getUserName(req);
 		let userHomePage = fs.readFileSync('./public/userHomePage.html', 'utf8');
 		userHomePage = userHomePage.replace('##username##', cookie);
 		return sendContent(userHomePage, res);
@@ -87,6 +88,8 @@ const signUp = function (req, res, next) {
 	usersDetails[userName] = { email, password };
 	let details = JSON.stringify(usersDetails);
 	fs.writeFile('./private/usersDetails.json', details, () => { });
+	usersData[userName] = {}
+	fs.writeFile('./private/usersData.json', JSON.stringify(usersData), () => { });
 	renderLogin(req, res, next);
 };
 
@@ -118,17 +121,17 @@ const setCookie = function (res, cookie) {
 	res.setHeader('Set-Cookie', "username=" + cookie);
 };
 
-const getCookie = function (req) {
+const getUserName = function (req) {
 	return req.headers['cookie'].split("=")[1];
 };
 
-const renderUserHomePage = function (req, res, next) {
+const login = function (req, res, next) {
 	let { userName, password } = readArgs(req.body);
 	let userHomePage = fs.readFileSync('./public/userHomePage.html', 'utf8');
 	if (isValidUser(userName, password)) {
 		userHomePage = userHomePage.replace('##username##', userName);
 		setCookie(res, userName);
-		return sendContent(userHomePage, res);
+		return redirect(res, '/userHomePage');
 	};
 	loginPageWithError(res);
 };
@@ -138,13 +141,48 @@ const renderLogOut = function (req, res, next) {
 	redirect(res, '/');
 };
 
+const renderCreateTodo = function (req, res, next) {
+	let { title, description } = readArgs(req.body);
+	usersData[getUserName(req)][title] = { description, "listItems": [] };
+	fs.writeFile('./private/usersData.json', JSON.stringify(usersData), () => { });
+	let todoPage = fs.readFileSync('./public/createTodo.html', 'utf8');
+	todoPage = todoPage.replace(/##title##/g, title);
+	todoPage = todoPage.replace('##description##', description);
+	sendContent(todoPage, res);
+};
+
+const updateList = function (req, res, next) {
+	let { title, listItems } = readArgs(req.body);
+	usersData[getUserName(req)][title].listItems = listItems;
+	fs.writeFile('./private/usersData.json', JSON.stringify(usersData), () => { });
+};
+
+const generateToDoListHtml = function (titleList) {
+	let listHtml = titleList.map(x =>
+		`<div style = "width:40px;">${x}</div>`
+	);
+	return listHtml.join('');
+};
+
+const renderUserHomePage = function (req, res, next) {
+	let userName = getUserName(req);
+	let userHomePage = fs.readFileSync('./public/userHomePage.html', 'utf8');
+	userHomePage = userHomePage.replace('##username##', userName);
+	let lists = Object.keys(usersData[userName]);
+	userHomePage = userHomePage.replace('##myLists##', generateToDoListHtml(lists));
+	return sendContent(userHomePage, res);
+};
+
 app.use(readBody);
 app.use(logRequest);
 app.get('/', renderHomePage);
 app.get('/usersName', renderUsersName);
 app.post('/signUp', signUp);
 app.get('/loginPage.html', renderLogin);
-app.post('/login', renderUserHomePage);
+app.post('/login', login);
+app.post('/createToDo.html', renderCreateTodo);
+app.post('/updateList', updateList);
+app.get('/userHomePage', renderUserHomePage);
 app.post('/logout', renderLogOut);
 app.use(renderFile);
 
@@ -158,7 +196,7 @@ module.exports = {
 	renderFile,
 	renderLogin,
 	loginPageWithError,
-	renderUserHomePage,
+	renderUserHomePage: login,
 	renderUsersName,
 	renderHomePage,
 	renderLogOut,

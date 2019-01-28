@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title id="title">##title##</title>
+	<link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+	<script src="main.js"></script>
+</head>
+
+<body>
+	<h2>Title: ##title##</h2>
+	<h3>Description: ##description##</h3>
+	<div id="list">
+		<h2 style="margin:5px">My To Do List</h2>
+		<input type="text" id="myInput" placeholder="list items...">
+		<button onclick="addItems()">Add</button>
+		<ul id="myLI">
+		</ul>
+	</div>
+	<button onclick="saveList()">Save</button>
+	<button><a href="/userHomePage" style="text-decoration: none">Done</a></button>
+</body>
+</html>

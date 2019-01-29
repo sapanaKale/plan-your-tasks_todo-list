@@ -42,21 +42,36 @@ const validateInfo = function () {
 };
 
 const newToDo = `<form action="/createToDo.html" method="POST">
-Title:
-<input type="text" name="title" required>
-<br><br>
-Description:
-<textarea name="description" cols="30" rows="3"></textarea>
-<br><br>
-<input type="submit" value="Add List">
-</form>
-`
+	Title:
+	<input type="text" name="title" required>
+	<br><br>
+	Description:
+	<textarea name="description" cols="30" rows="3"></textarea>
+	<br><br>
+	<input type="submit" value="Add List">
+	</form>`
 
 const createNewToDo = function () {
 	document.getElementById("newToDo").innerHTML = newToDo;
 };
 
 const deleteElement = () => event.target.parentNode.remove();
+
+const editElement = function () {
+	let textToEdit = event.target.parentNode.innerText.slice(7);
+	event.target.parentNode.innerHTML =
+		`<textarea cols="30" rows="2" id="editedInput" 
+		style="font-size:20px"> ${textToEdit} </textarea>
+		<button onclick="updateItem()">Done</button>`;
+};
+
+const updateItem = function () {
+	let item = document.getElementById('editedInput').value;
+	event.target.parentNode.innerHTML =
+		`<span style="color: blue; float: right; padding-left: 20px;" onclick="editElement()">edit</span>
+		<span style="color: red; float: right;" onclick="deleteElement()"> x </span>
+		<li style="text-decoration: none;" onclick="changeStatus()">${item}</li>`;
+};
 
 const createDeleteOption = function () {
 	let deleteItem = document.createElement("span");
@@ -67,10 +82,21 @@ const createDeleteOption = function () {
 	return deleteItem;
 };
 
+const createEditOption = function () {
+	let editOption = document.createElement("span");
+	editOption.innerText = "edit";
+	editOption.style.color = "blue";
+	editOption.style.float = "right";
+	editOption.style.paddingLeft = "20px";
+	editOption.onclick = editElement;
+	return editOption;
+};
+
 const createItemsDiv = function () {
 	let itemDiv = document.createElement("div");
 	itemDiv.style.width = "50%";
 	itemDiv.style.fontSize = "30px";
+	itemDiv.appendChild(createEditOption());
 	itemDiv.appendChild(createDeleteOption());
 	return itemDiv;
 };
@@ -98,16 +124,16 @@ const changeStatus = function () {
 
 const saveList = function () {
 	let title = document.getElementById("title").innerText;
-	let list = { title, "listItems": {} };
+	let list = { title, "listItems": [] };
 	let listItems = document.getElementsByTagName('li');
 	for (let pos = 0; pos < listItems.length; pos++) {
-		list.listItems[listItems[pos].innerText] = "pending";
-		if (listItems[pos].style.textDecoration == "line-through") {
-			list.listItems[listItems[pos].innerText] = "done";
-		};
+		let status = "pending";
+		if (listItems[pos].style.textDecoration == "line-through") status = "done";
+		let item = listItems[pos].innerText;
+		list.listItems.push({ item, status });
 	}
 	fetch('/updateList', {
 		method: 'POST',
 		body: `title=${list.title}&listItems=${JSON.stringify(list.listItems)}`
-	})
+	});
 };

@@ -85,7 +85,7 @@ const signUp = function (req, res, next) {
 	usersDetails[userName] = { email, password };
 	let details = JSON.stringify(usersDetails);
 	fs.writeFile('./private/usersDetails.json', details, () => { });
-	usersData[userName] = {}
+	usersData[userName] = [];
 	fs.writeFile('./private/usersData.json', JSON.stringify(usersData), () => { });
 	renderLogin(req, res, next);
 };
@@ -140,7 +140,7 @@ const renderLogOut = function (req, res, next) {
 
 const renderCreateTodo = function (req, res, next) {
 	let { title, description } = readArgs(req.body);
-	usersData[getUserName(req)][title] = { description };
+	usersData[getUserName(req)].unshift({ title, description });
 	fs.writeFile('./private/usersData.json', JSON.stringify(usersData), () => { });
 	let todoPage = fs.readFileSync('./public/createTodo.html', 'utf8');
 	todoPage = todoPage.replace(/##title##/g, title);
@@ -151,7 +151,8 @@ const renderCreateTodo = function (req, res, next) {
 
 const updateList = function (req, res, next) {
 	let { title, listItems } = readArgs(req.body);
-	usersData[getUserName(req)][title].listItems = listItems;
+	let todoList = usersData[getUserName(req)].filter(x => x.title == title);
+	todoList[0].listItems = listItems;
 	fs.writeFile('./private/usersData.json', JSON.stringify(usersData), () => { });
 };
 
@@ -166,9 +167,13 @@ const renderUserHomePage = function (req, res, next) {
 	let userName = getUserName(req);
 	let userHomePage = fs.readFileSync('./public/userHomePage.html', 'utf8');
 	userHomePage = userHomePage.replace('##username##', userName);
-	let lists = Object.keys(usersData[userName]);
+	let lists = usersData[userName].map(x => x.title);
 	userHomePage = userHomePage.replace('##myLists##', generateToDoListHtml(lists));
 	return sendContent(userHomePage, res);
+};
+
+const getEditOption = function () {
+	return `<span style="color: blue; float: right; padding-left: 20px;" onclick="editElement()">edit</span>`
 };
 
 const getDeleteOption = function () {
@@ -177,7 +182,8 @@ const getDeleteOption = function () {
 
 const getItemStyle = function (itemsList, item) {
 	let itemStyle = `style = "text-decoration: none"`;
-	if (itemsList[item] == "done") {
+	let listItem = itemsList.filter(x => x.item == item);
+	if (listItem[0].status == "done") {
 		itemStyle = `style = "text-decoration: line-through"`;
 	};
 	return itemStyle;
@@ -185,11 +191,12 @@ const getItemStyle = function (itemsList, item) {
 
 const displayListItems = function (listItems) {
 	const divStyle = `style="width: 50%; font-size: 30px;"`;
-	let items = Object.keys(listItems);
+	let items = listItems.map(x => x.item);
 	let listItemsHTML = items.map(item => {
 		let itemStyle = getItemStyle(listItems, item);
-		return `<div ${divStyle} onclick="changeStatus()">
-		${getDeleteOption()} <li ${itemStyle}>${item}</li>
+		return `<div ${divStyle}>
+		${getEditOption()} ${getDeleteOption()} 
+		<li onclick="changeStatus()" ${itemStyle}>${item}</li>
 		</div>`
 	});
 	return listItemsHTML.join('');
@@ -198,8 +205,8 @@ const displayListItems = function (listItems) {
 const renderTodoList = function (req, res, next) {
 	let userName = getUserName(req);
 	let title = req.url.slice(6);
-	let description = usersData[userName][title].description;
-	let listItems = usersData[userName][title].listItems;
+	let description = usersData[userName].filter(x => x.title == title)[0].description;
+	let listItems = usersData[userName].filter(x => x.title == title)[0].listItems;
 	let todoPage = fs.readFileSync('./public/createTodo.html', 'utf8');
 	todoPage = todoPage.replace(/##title##/g, title);
 	todoPage = todoPage.replace('##description##', description);

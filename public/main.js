@@ -122,6 +122,16 @@ const changeStatus = function () {
 	event.target.style.textDecoration = "line-through"
 };
 
+const deleteList = function(){
+	let listHolder = event.target.parentNode;
+	let listName = listHolder.firstChild.nextSibling.innerText;
+	fetch('/deleteList', {
+		method: 'POST',
+		body: `title=${listName}`
+	});
+	listHolder.remove();
+}
+
 const saveList = function () {
 	let title = document.getElementById("title").innerText;
 	let list = { title, "listItems": [] };

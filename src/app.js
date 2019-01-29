@@ -158,7 +158,10 @@ const updateList = function (req, res, next) {
 
 const generateToDoListHtml = function (titleList) {
 	let listHtml = titleList.map(title =>
-		`<a href="/todo/${title}" style="text-decoration:none;">${title}</a><br><br>`
+		`<div>
+		<a href="/todo/${title}" style="text-decoration:none;">${title}</a>
+		<button onclick="deleteList()"> delete </button>
+		</div>`
 	);
 	return listHtml.join('');
 };
@@ -202,6 +205,15 @@ const displayListItems = function (listItems) {
 	return listItemsHTML.join('');
 };
 
+const deleteList = function (req, res, next){
+	let listName = readArgs(req.body).title;
+	let userName = getUserName(req);
+	let list = usersData[userName].filter(x => x.title == listName)[0];
+	let indexOfList = usersData[userName].indexOf(list);
+	usersData[userName].splice(indexOfList, 1);
+	fs.writeFile('./private/usersData.json', JSON.stringify(usersData), () => { });
+};
+
 const renderTodoList = function (req, res, next) {
 	let userName = getUserName(req);
 	let title = req.url.slice(6);
@@ -226,6 +238,7 @@ app.post('/createToDo.html', renderCreateTodo);
 app.post('/updateList', updateList);
 app.get('/userHomePage', renderUserHomePage);
 app.get(/\/todo\//, renderTodoList);
+app.post('/deleteList', deleteList);
 app.post('/logout', renderLogOut);
 app.use(renderFile);
 

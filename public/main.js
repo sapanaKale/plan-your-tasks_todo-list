@@ -115,16 +115,24 @@ const addItems = function () {
 	itemsList.appendChild(itemDiv);
 };
 
-const changeStatus = function () {
-	if (event.target.style.textDecoration == "line-through") {
-		return event.target.style.textDecoration = "none";
-	}
-	event.target.style.textDecoration = "line-through"
+const statusDone = function (item) {
+	return item.style.textDecoration == "line-through";
 };
 
-const deleteList = function(){
-	let listHolder = event.target.parentNode;
-	let listName = listHolder.firstChild.nextSibling.innerText;
+const setStatus = function (item, status) {
+	item.style.textDecoration = status;
+};
+
+const changeStatus = function () {
+	if (statusDone(event.target)) {
+		return setStatus(event.target, "none");
+	};
+	setStatus(event.target, "line-through");
+};
+
+const deleteList = function () {
+	const listHolder = event.target.parentNode;
+	const listName = listHolder.firstChild.nextSibling.innerText;
 	fetch('/deleteList', {
 		method: 'POST',
 		body: `title=${listName}`
@@ -132,18 +140,19 @@ const deleteList = function(){
 	listHolder.remove();
 }
 
+
 const saveList = function () {
-	let title = document.getElementById("title").innerText;
-	let list = { title, "listItems": [] };
-	let listItems = document.getElementsByTagName('li');
+	const title = document.getElementById("title").innerText;
+	let items = new Array;
+	const listItems = document.getElementsByTagName('li');
 	for (let pos = 0; pos < listItems.length; pos++) {
 		let status = "pending";
-		if (listItems[pos].style.textDecoration == "line-through") status = "done";
+		if (statusDone(listItems[pos])) status = "done";
 		let item = listItems[pos].innerText;
-		list.listItems.push({ item, status });
-	}
+		items.push({ item, status });
+	};
 	fetch('/updateList', {
 		method: 'POST',
-		body: `title=${list.title}&listItems=${JSON.stringify(list.listItems)}`
+		body: `title=${title}&listItems=${JSON.stringify(items)}`
 	});
 };

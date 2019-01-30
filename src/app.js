@@ -1,9 +1,13 @@
 const fs = require('fs');
-const usersDetails = JSON.parse(fs.readFileSync('./private/usersDetails.json'));
-const usersData = JSON.parse(fs.readFileSync('./private/usersData.json'));
-
 const App = require('./createApp');
 const app = new App();
+
+const { User,
+	Todo,
+	getAllUsersName,
+	homePage,
+	initialLoginPage,
+	loginPageWithErr } = require('./lib');
 
 const logRequest = function (req, res, next) {
 	console.log(req.method, req.url);
@@ -22,7 +26,7 @@ const readBody = function (req, res, next) {
 };
 
 const readArgs = function (text) {
-	let args = {};
+	const args = {};
 	const splitKeyValue = pair => pair.split('=');
 	const assignKeyValueToArgs = ([key, value]) => args[key] = value;
 	text.split('&').map(splitKeyValue).forEach(assignKeyValueToArgs);
@@ -40,7 +44,7 @@ const sendNotFound = send.bind(null, 404, "Not Found");
 const sendServerError = send.bind(null, 500, "Internal Server Error");
 
 const redirect = function (res, location) {
-	res.statusCode = 301;
+	res.statusCode = 302;
 	res.setHeader("Location", location);
 	res.end();
 };
@@ -55,63 +59,38 @@ const isErrorFileNotFound = function (errorCode) {
 };
 
 const renderFile = function (req, res) {
-	let path = getPath(req.url);
+	const path = getPath(req.url);
 	fs.readFile(path, (err, content) => {
 		try {
 			sendContent(content, res);
 		} catch (error) {
 			if (isErrorFileNotFound(err.code)) {
-				sendNotFound(res);
-				return;
+				return sendNotFound(res);
 			}
 			sendServerError(res);
-		};
+		}
 	});
 };
 
 const renderHomePage = function (req, res, next) {
-	if (req.headers['cookie']) {
-		return redirect(res, '/userHomePage');
-	};
-	sendContent(fs.readFileSync('./public/index.html', 'utf8'), res);
+	if (req.headers['cookie']) return redirect(res, '/userHomePage');
+	sendContent(homePage, res);
 };
 
 const renderUsersName = function (req, res, next) {
-	sendContent(JSON.stringify(Object.keys(usersDetails)), res);
+	sendContent(getAllUsersName(), res);
 };
 
 const signUp = function (req, res, next) {
-	let { userName, email, password } = readArgs(req.body);
-	usersDetails[userName] = { email, password };
-	let details = JSON.stringify(usersDetails);
-	fs.writeFile('./private/usersDetails.json', details, () => { });
-	usersData[userName] = [];
-	fs.writeFile('./private/usersData.json', JSON.stringify(usersData), () => { });
+	const { userName, email, password } = readArgs(req.body);
+	const user = new User(userName)
+	user.register(email, password);
+	user.initializeData();
 	renderLogin(req, res, next);
 };
 
 const renderLogin = function (req, res, next) {
-	let loginPage = fs.readFileSync('./public/loginPage.html', 'utf8');
-	loginPage = loginPage.replace("#msg#", "");
-	sendContent(loginPage, res);
-};
-
-const isValidUserName = function (userName) {
-	return Object.keys(usersDetails).includes(userName);
-};
-
-const isValidPassword = function (userName, password) {
-	return usersDetails[userName].password == password;
-};
-
-const isValidUser = function (userName, password) {
-	return isValidUserName(userName) && isValidPassword(userName, password);
-};
-
-const loginPageWithError = function (res) {
-	let loginPage = fs.readFileSync('./public/loginPage.html', 'utf8');
-	loginPage = loginPage.replace("#msg#", "invalid username or password");
-	sendContent(loginPage, res);
+	sendContent(initialLoginPage, res);
 };
 
 const setCookie = function (res, cookie) {
@@ -123,108 +102,65 @@ const getUserName = function (req) {
 };
 
 const login = function (req, res, next) {
-	let { userName, password } = readArgs(req.body);
-	let userHomePage = fs.readFileSync('./public/userHomePage.html', 'utf8');
-	if (isValidUser(userName, password)) {
-		userHomePage = userHomePage.replace('##username##', userName);
+	const { userName, password } = readArgs(req.body);
+	const user = new User(userName);
+	if (user.isValidUser(password)) {
 		setCookie(res, userName);
 		return redirect(res, '/userHomePage');
 	};
-	loginPageWithError(res);
-};
-
-const renderLogOut = function (req, res, next) {
-	res.setHeader("Set-Cookie", "username=; expires=" + new Date().toUTCString());
-	redirect(res, '/');
-};
-
-const renderCreateTodo = function (req, res, next) {
-	let { title, description } = readArgs(req.body);
-	usersData[getUserName(req)].unshift({ title, description });
-	fs.writeFile('./private/usersData.json', JSON.stringify(usersData), () => { });
-	let todoPage = fs.readFileSync('./public/createTodo.html', 'utf8');
-	todoPage = todoPage.replace(/##title##/g, title);
-	todoPage = todoPage.replace('##description##', description);
-	todoPage = todoPage.replace('##listItems##', '');
-	sendContent(todoPage, res);
-};
-
-const updateList = function (req, res, next) {
-	let { title, listItems } = readArgs(req.body);
-	let todoList = usersData[getUserName(req)].filter(x => x.title == title);
-	todoList[0].listItems = listItems;
-	fs.writeFile('./private/usersData.json', JSON.stringify(usersData), () => { });
-};
-
-const generateToDoListHtml = function (titleList) {
-	let listHtml = titleList.map(title =>
-		`<div>
-		<a href="/todo/${title}" style="text-decoration:none;">${title}</a>
-		<button onclick="deleteList()"> delete </button>
-		</div>`
-	);
-	return listHtml.join('');
+	sendContent(loginPageWithErr, res);
 };
 
 const renderUserHomePage = function (req, res, next) {
-	let userName = getUserName(req);
-	let userHomePage = fs.readFileSync('./public/userHomePage.html', 'utf8');
-	userHomePage = userHomePage.replace('##username##', userName);
-	let lists = usersData[userName].map(x => x.title);
-	userHomePage = userHomePage.replace('##myLists##', generateToDoListHtml(lists));
-	return sendContent(userHomePage, res);
+	try {
+		const userName = getUserName(req);
+		const user = new User(userName);
+		sendContent(user.getHomePage(), res);
+	} catch (err) {
+		sendNotFound(res);
+	}
 };
 
-const getEditOption = function () {
-	return `<span style="color: blue; float: right; padding-left: 20px;" onclick="editElement()">edit</span>`
+const renderTodoEditor = function (req, res, next) {
+	const todoDetails = readArgs(req.body);
+	const userName = getUserName(req);
+	const user = new User(userName);
+	user.initializeTodo(todoDetails);
+	const todo = new Todo(todoDetails.title, todoDetails.description)
+	sendContent(todo.editor(), res);
 };
 
-const getDeleteOption = function () {
-	return `<span style="color: red; float: right;" onclick="deleteElement()"> x </span>`;
-};
-
-const getItemStyle = function (itemsList, item) {
-	let itemStyle = `style = "text-decoration: none"`;
-	let listItem = itemsList.filter(x => x.item == item);
-	if (listItem[0].status == "done") {
-		itemStyle = `style = "text-decoration: line-through"`;
-	};
-	return itemStyle;
-};
-
-const displayListItems = function (listItems) {
-	const divStyle = `style="width: 50%; font-size: 30px;"`;
-	let items = listItems.map(x => x.item);
-	let listItemsHTML = items.map(item => {
-		let itemStyle = getItemStyle(listItems, item);
-		return `<div ${divStyle}>
-		${getEditOption()} ${getDeleteOption()} 
-		<li onclick="changeStatus()" ${itemStyle}>${item}</li>
-		</div>`
-	});
-	return listItemsHTML.join('');
-};
-
-const deleteList = function (req, res, next){
-	let listName = readArgs(req.body).title;
-	let userName = getUserName(req);
-	let list = usersData[userName].filter(x => x.title == listName)[0];
-	let indexOfList = usersData[userName].indexOf(list);
-	usersData[userName].splice(indexOfList, 1);
-	fs.writeFile('./private/usersData.json', JSON.stringify(usersData), () => { });
+const updateList = function (req, res, next) {
+	const { title, listItems } = readArgs(req.body);
+	const userName = getUserName(req);
+	const user = new User(userName);
+	user.updateList(title, listItems);
 };
 
 const renderTodoList = function (req, res, next) {
-	let userName = getUserName(req);
-	let title = req.url.slice(6);
-	let description = usersData[userName].filter(x => x.title == title)[0].description;
-	let listItems = usersData[userName].filter(x => x.title == title)[0].listItems;
-	let todoPage = fs.readFileSync('./public/createTodo.html', 'utf8');
-	todoPage = todoPage.replace(/##title##/g, title);
-	todoPage = todoPage.replace('##description##', description);
-	listItems = JSON.parse(listItems);
-	todoPage = todoPage.replace('##listItems##', displayListItems(listItems));
-	sendContent(todoPage, res);
+	try {
+		const user = new User(getUserName(req));
+		const title = req.url.slice(6);
+		let { description, listItems } = user.getListData(title);
+		listItems = JSON.parse(listItems);
+		const todo = new Todo(title, description, listItems);
+		sendContent(todo.editor(), res);
+	} catch (err) {
+		sendNotFound(res);
+	}
+};
+
+const deleteList = function (req, res, next) {
+	const title = readArgs(req.body).title;
+	const userName = getUserName(req);
+	const user = new User(userName);
+	user.deleteList(title);
+};
+
+const logOut = function (req, res, next) {
+	const now = new Date().toUTCString();
+	res.setHeader("Set-Cookie", `username=; expires=${now}`);
+	redirect(res, '/');
 };
 
 app.use(readBody);
@@ -234,12 +170,12 @@ app.get('/usersName', renderUsersName);
 app.post('/signUp', signUp);
 app.get('/loginPage.html', renderLogin);
 app.post('/login', login);
-app.post('/createToDo.html', renderCreateTodo);
+app.post('/createToDo.html', renderTodoEditor);
 app.post('/updateList', updateList);
 app.get('/userHomePage', renderUserHomePage);
 app.get(/\/todo\//, renderTodoList);
 app.post('/deleteList', deleteList);
-app.post('/logout', renderLogOut);
+app.post('/logout', logOut);
 app.use(renderFile);
 
 const requestHandler = app.handleRequest.bind(app);
@@ -251,10 +187,10 @@ module.exports = {
 	readBody,
 	renderFile,
 	renderLogin,
-	loginPageWithError,
-	renderUserHomePage: login,
+	renderUserHomePage,
+	login,
 	renderUsersName,
 	renderHomePage,
-	renderLogOut,
+	logOut,
 	signUp
 };

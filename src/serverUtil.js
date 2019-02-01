@@ -1,7 +1,3 @@
-const { initializeUsersDetails } = require('./dataUtil');
-
-const usersDetails = initializeUsersDetails();
-
 const readArgs = function (text) {
 	const args = new Object;
 	const splitKeyValue = pair => pair.split('=');
@@ -35,16 +31,13 @@ const isErrorFileNotFound = function (errorCode) {
 	return errorCode == "ENOENT";
 };
 
-const setCookie = function (res, cookie) {
-	res.setHeader('Set-Cookie', "username=" + cookie);
+const setCookie = function(res, name, value) {
+	res.setHeader('Set-Cookie', `${name}=${value}`)
 };
 
-const getUserName = function (req) {
-	return req.headers['cookie'].split("=")[1];
-};
-
-const getAllUsersName = function () {
-	return JSON.stringify(Object.keys(usersDetails));
+const getCookie = function(req, name){
+	let cookies = readArgs(req.headers['cookie']);
+	return cookies[name];
 };
 
 module.exports = {
@@ -56,6 +49,5 @@ module.exports = {
 	getPath,
 	isErrorFileNotFound,
 	setCookie,
-	getUserName,
-	getAllUsersName
+	getCookie
 };

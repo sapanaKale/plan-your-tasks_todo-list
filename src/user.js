@@ -21,6 +21,10 @@ class User {
 		return Object.keys(usersDetails).includes(this.userName);
 	};
 
+	isNameAvailable(){
+		return !this.isValidUserName();
+	};
+
 	isValidPassword(password) {
 		return usersDetails[this.userName].password == password;
 	};

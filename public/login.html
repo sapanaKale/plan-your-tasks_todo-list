@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title> Login </title>
+	<link rel="stylesheet" type="text/css" media="screen" href="/main.css" />
+	<script src="/main.js"></script>
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ"
+	 crossorigin="anonymous">
+</head>
+
+<body>
+	<div class="centerBox">
+		<h1 class="topicHeading"><a style="text-decoration: none;" href="index.html">
+				<i class="fas fa-home"></i> </a> Login </h1>
+		<form action="/login" method="POST">
+			UserName:
+			<input type="text" name="userName">
+			<br><br>
+			Password:
+			<input type="password" name="password">
+			<br><br>
+			<div>#msg#</div>
+			<input type="submit" value="login">
+			<br><br>
+			<p>Don't have account?
+				<a href="createAccount.html"> Create Account </a></p>
+		</form>
+	</div>
+
+</body>
+
+</html>

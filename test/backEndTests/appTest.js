@@ -5,13 +5,14 @@ const express = require('express');
 const app = express();
 const {
 	logRequest,
-	readArgs,
 	readBody,
 	renderLogin,
 	renderUsersName,
 	renderHomePage,
 	signUp
-} = require('../../src/app');
+} = require('../../src/requestHandlers');
+
+const { readArgs } = require('../../src/serverUtil')
 
 describe('readArgs', function () {
 	it('should parse the given data in object form', function () {
@@ -29,8 +30,8 @@ describe('GET /usersName', function () {
 	app.get('/usersName', renderUsersName);
 	it('responds with array of names', function (done) {
 		request(app)
-		.get('/usersName')
-		.expect(200, done);
+			.get('/usersName')
+			.expect(200, done);
 	});
 });
 
@@ -38,8 +39,8 @@ describe('GET /loginPage.html', function () {
 	app.get('/loginPage.html', renderLogin);
 	it('responds with loginpage', function (done) {
 		request(app)
-		.get('/loginPage.html')
-		.expect(200, done);
+			.get('/loginPage.html')
+			.expect(200, done);
 	});
 });
 
@@ -47,8 +48,8 @@ describe('GET /', function () {
 	app.get('/', renderHomePage);
 	it('responds with homepage', function (done) {
 		request(app)
-		.get('/')
-		.expect(200, done);
+			.get('/')
+			.expect(200, done);
 	});
 });
 

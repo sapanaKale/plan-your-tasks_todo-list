@@ -6,7 +6,7 @@ const {
 	logRequest,
 	renderFile,
 	renderHomePage,
-	renderUsersName,
+	// renderUsersName,
 	signUp,
 	renderLogin,
 	login,
@@ -15,16 +15,18 @@ const {
 	updateList,
 	renderTodoList,
 	deleteList,
-	logOut } = require('./requestHandlers');
+	logOut,
+	validateUserName } = require('./requestHandlers');
 
 app.use(readBody);
 app.use(logRequest);
 app.get('/', renderHomePage);
-app.get('/usersName', renderUsersName);
+app.post('/validateUserName', validateUserName);
+// app.get('/usersName', renderUsersName);
 app.post('/signUp', signUp);
-app.get('/loginPage.html', renderLogin);
+app.get('/login.html', renderLogin);
 app.post('/login', login);
-app.post('/createToDo.html', renderTodoEditor);
+app.post('/todoEditor.html', renderTodoEditor);
 app.post('/updateList', updateList);
 app.get('/userHomePage', renderUserHomePage);
 app.get(/\/todo\//, renderTodoList);

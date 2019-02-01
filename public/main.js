@@ -2,63 +2,48 @@ const disableSubmit = function () {
 	document.getElementById('submit').disabled = true;
 };
 
-const validateUserName = function (userName) {
-	fetch('/usersName')
-		.then(function (res) {
-			return res.json();
-		})
-		.then(function (names) {
-			checkUserName(userName, names);
-		})
-};
-
-const checkUserName = function (userName, names) {
-	document.getElementById('unMsg').innerText = "";
-	if (names.includes(userName)) {
-		document.getElementById('unMsg').innerText = "userName already exists!!";
-		disableSubmit();
-	};
-};
-
 const isPasswordInvalid = function () {
 	const password = document.getElementById('password').value;
 	const confirmedPassword = document.getElementById('confirmPassword').value;
 	return password != confirmedPassword;
 };
 
-const checkPassword = function () {
-	document.getElementById('pwMsg').innerText = "";
+const removeErrMsg = function () {
+	document.getElementById("unMsg").innerText = "";
+};
+
+const enableSubmit = function () {
+	document.getElementById('submit').disabled = false;
+};
+
+const validateUserName = function () {
+	const name = document.getElementById('userName').value;
+	fetch('/validateUserName', {
+		method: 'POST',
+		body: `userName=${name}`
+	})
+		.then(res => res.json())
+		.then(result => {
+			document.getElementById("checkInfo").disabled = false;
+			if (!result.validation) {
+				document.getElementById("checkInfo").disabled = true;
+				document.getElementById("unMsg").innerText = "UserName Already Exists";
+			};
+		});
+};
+
+const validatePassword = function () {
 	if (isPasswordInvalid()) {
 		document.getElementById("pwMsg").innerText = "password doesn't match"
 		disableSubmit();
+		return false;
 	};
-};
-
-const validateInfo = function () {
-	document.getElementById('submit').disabled = false;
-	checkPassword();
-	const name = document.getElementById('userName').value;
-	validateUserName(name);
-};
-
-const newToDo = `<form action="/createToDo.html" method="POST">
-	Title:
-	<input type="text" name="title" required>
-	<br><br>
-	Description:
-	<textarea name="description" cols="30" rows="3"></textarea>
-	<br><br>
-	<input type="submit" value="Add List">
-	</form>`
-
-const createNewToDo = function () {
-	document.getElementById("newToDo").innerHTML = newToDo;
 };
 
 const deleteElement = () => event.target.parentNode.remove();
 
 const editElement = function () {
-	let textToEdit = event.target.parentNode.innerText.slice(7);
+	let textToEdit = event.target.parentNode.innerText;
 	event.target.parentNode.innerHTML =
 		`<textarea cols="30" rows="2" id="editedInput" 
 		style="font-size:20px"> ${textToEdit} </textarea>
@@ -68,14 +53,14 @@ const editElement = function () {
 const updateItem = function () {
 	let item = document.getElementById('editedInput').value;
 	event.target.parentNode.innerHTML =
-		`<span style="color: blue; float: right; padding-left: 20px;" onclick="editElement()">edit</span>
-		<span style="color: red; float: right;" onclick="deleteElement()"> x </span>
+		`<i style="color: blue; float: right; padding-left: 20px;" onclick="editElement()" class="fas fa-edit"></i>
+		<i style="color: red; float: right;" onclick="deleteElement()" class="fas fa-eraser"></i>
 		<li style="text-decoration: none;" onclick="changeStatus()">${item}</li>`;
 };
 
 const createDeleteOption = function () {
-	let deleteItem = document.createElement("span");
-	deleteItem.innerText = " x ";
+	let deleteItem = document.createElement("i");
+	deleteItem.className = "fas fa-eraser";
 	deleteItem.style.color = "red";
 	deleteItem.style.float = "right";
 	deleteItem.onclick = deleteElement;
@@ -83,8 +68,8 @@ const createDeleteOption = function () {
 };
 
 const createEditOption = function () {
-	let editOption = document.createElement("span");
-	editOption.innerText = "edit";
+	let editOption = document.createElement("i");
+	editOption.className = "fas fa-edit";
 	editOption.style.color = "blue";
 	editOption.style.float = "right";
 	editOption.style.paddingLeft = "20px";

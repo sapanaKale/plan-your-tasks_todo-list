@@ -13,8 +13,7 @@ const {
 	getPath,
 	isErrorFileNotFound,
 	setCookie,
-	getUserName,
-	getAllUsersName,
+	getCookie,
 } = require('./serverUtil');
 
 const logRequest = function (req, res, next) {
@@ -52,12 +51,15 @@ const renderHomePage = function (req, res, next) {
 	sendContent(homePage, res);
 };
 
-const renderUsersName = function (req, res, next) {
-	sendContent(getAllUsersName(), res);
-};
+const validateUserName = function (req, res, next) {
+	const { userName } = readArgs(req.body);
+	const user = new User(userName);
+	const validation = user.isNameAvailable();
+	sendContent(JSON.stringify({ validation }), res);
+}
 
 const signUp = function (req, res, next) {
-	const { userName, email, password } = readArgs(req.body);
+	const { userName, email, password, confirmedPassword } = readArgs(req.body);
 	const user = new User(userName)
 	user.register(email, password);
 	user.initializeData();
@@ -72,7 +74,7 @@ const login = function (req, res, next) {
 	const { userName, password } = readArgs(req.body);
 	const user = new User(userName);
 	if (user.isValidUser(password)) {
-		setCookie(res, userName);
+		setCookie(res, "username", userName);
 		return redirect(res, '/userHomePage');
 	};
 	sendContent(loginPageWithErr, res);
@@ -80,7 +82,7 @@ const login = function (req, res, next) {
 
 const renderUserHomePage = function (req, res, next) {
 	try {
-		const userName = getUserName(req);
+		const userName = getCookie(req, "username");
 		const user = new User(userName);
 		sendContent(user.getHomePage(), res);
 	} catch (err) {
@@ -90,7 +92,7 @@ const renderUserHomePage = function (req, res, next) {
 
 const renderTodoEditor = function (req, res, next) {
 	const todoDetails = readArgs(req.body);
-	const userName = getUserName(req);
+	const userName = getCookie(req, "username");
 	const user = new User(userName);
 	user.initializeTodo(todoDetails);
 	const todo = new Todo(todoDetails.title, todoDetails.description)
@@ -99,14 +101,14 @@ const renderTodoEditor = function (req, res, next) {
 
 const updateList = function (req, res, next) {
 	const { title, listItems } = readArgs(req.body);
-	const userName = getUserName(req);
+	const userName = getCookie(req, "username");
 	const user = new User(userName);
 	user.updateList(title, listItems);
 };
 
 const renderTodoList = function (req, res, next) {
 	try {
-		const user = new User(getUserName(req));
+		const user = new User(getCookie(req, "username"));
 		const title = req.url.slice(6);
 		let { description, listItems } = user.getListData(title);
 		listItems = JSON.parse(listItems);
@@ -119,7 +121,7 @@ const renderTodoList = function (req, res, next) {
 
 const deleteList = function (req, res, next) {
 	const title = readArgs(req.body).title;
-	const userName = getUserName(req);
+	const userName = getCookie(req, "username");
 	const user = new User(userName);
 	user.deleteList(title);
 };
@@ -139,10 +141,10 @@ module.exports = {
 	renderHomePage,
 	renderLogin,
 	renderUserHomePage,
-	renderUsersName,
 	renderTodoList,
 	renderTodoEditor,
 	login,
 	deleteList,
-	updateList
+	updateList,
+	validateUserName
 };

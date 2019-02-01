@@ -1,20 +1,28 @@
 .formLink{
-	font-size: 20px;
+	font-size: 25px;
 	padding: 10px;
 	text-decoration: none;
 }
 
 .mainHeading{
-	color:orange;
+	margin-top: 5%;
 	text-align: right;
-	font-size: 50px;
-	margin-right: 100px;
+	font-size: 60px;
+	margin-right: 5%;
 }
 
 .mainDiv{
 	display: flex; 
-	justify-content: space-evenly;
-	padding-top: 10px;
+	justify-content: space-between;
+	margin-top: 3%;
+	margin-left: 70%;
+	margin-right: 5%;
+	font-size: 20px;
+}
+
+.border {
+	width: 100%;
+	border-bottom: 1px solid gray;
 }
 
 .info{
@@ -24,9 +32,50 @@
 }
 
 .topicHeading{
+	padding: 30px;
+	padding-top: 50px;
 	text-align:center;
 	color:orange;
 }
+
+.todoText {
+	margin-left: 68%;
+	margin-right: 5%;
+	margin-top: 8%;
+	font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+	font-size: 25px;
+	color: grey;
+	text-align: justify;
+}
+
+.homepageBG {
+	background-image: url("./images/todo6.jpg");
+	background-size: cover;
+}
+
+.createNewTodo {
+	padding: 20px;
+	margin-left: 80%;
+	background-color: aquamarine;
+	border: 1px solid black;
+	margin-right: 3%;
+	font-size: 20px;
+}
+
+.userHomeHeading {
+	margin-top: 2%;
+	text-align: center;
+	font-size: 60px;
+	font-family: serif;
+}
+
+.centerBox {
+	text-align: center;
+	background-color: aliceblue;
+	height: 450px;
+	width: 500px;
+	margin: 10% auto;
+	}
 
 .link{
 	text-underline-position: below;

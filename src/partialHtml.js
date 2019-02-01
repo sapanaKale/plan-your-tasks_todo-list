@@ -1,19 +1,20 @@
 const generateToDoListHtml = function (titleList) {
 	const listHtml = titleList.map(title =>
 		`<div>
-		<a href="/todo/${title}" style="text-decoration:none;">${title}</a>
-		<button onclick="deleteList()"> delete </button>
+		<a href="/todo/${title}" style="text-decoration:none;"><i class="far fa-hand-point-right"></i>
+		${title}</a>
+		<i onclick="deleteList()" class="fas fa-trash"></i>
 		</div>`
 	);
 	return listHtml.join('');
 };
 
 const getEditOption = function () {
-	return `<span style="color: blue; float: right; padding-left: 20px;" onclick="editElement()">edit</span>`
+	return `<i style="color: blue; float: right; padding-left: 20px;" onclick="editElement()" class="fas fa-edit"></i>`
 };
 
 const getDeleteOption = function () {
-	return `<span style="color: red; float: right;" onclick="deleteElement()"> x </span>`;
+	return `<i style="color: red; float: right;" onclick="deleteElement()" class="fas fa-eraser"></i>`;
 };
 
 const getItemStyle = function (itemsList, item) {

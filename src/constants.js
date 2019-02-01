@@ -2,13 +2,13 @@ const {
 	getContent,
 	replaceContent } = require('./dataUtil');
 
-const userHomePage = getContent('./public/userHomePage.html');
+const userHomePage = getContent('./public/userHome.html');
 const homePage = getContent('./public/index.html');
-const todoEditor = getContent('./public/createTodo.html');
-const loginPage = getContent('./public/loginPage.html');
-const loginErr = "invalid username or password";
+const todoEditor = getContent('./public/todoEditor.html');
+const loginPage = getContent('./public/login.html');
+const loginErrMsg = "invalid username or password";
 const initialLoginPage = replaceContent(loginPage, "#msg#", "");
-const loginPageWithErr = replaceContent(loginPage, "#msg#", loginErr);
+const loginPageWithErr = replaceContent(loginPage, "#msg#", loginErrMsg);
 
 module.exports = {
 	userHomePage,

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>create new account</title>
+	<link rel="stylesheet" type="text/css" media="screen" href="/main.css" />
+	<script src="/main.js"></script>
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ"
+	 crossorigin="anonymous">
+</head>
+
+<body class="createAccBG">
+	<div class="centerBox">
+		<h1 class="topicHeading"><a style="text-decoration: none;" href="index.html">
+				<i class="fas fa-home"></i>
+			</a> Create Account</h1>
+		<form action="/signUp" method="POST" onsubmit="return validatePassword()">
+			UserName:
+			<input type="text" name="userName" id="userName" onfocusout="validateUserName()" onfocus="removeErrMsg() && disableSubmit()" required>
+			<div id="unMsg"></div>
+			<br>
+			E-mail Id:
+			<input type="text" name="email" onfocus="disableSubmit()" required>
+			<br><br>
+			Password:
+			<input type="password" name="password" onfocus="disableSubmit()" id="password" required>
+			<br><br>
+			Confirm Password:
+			<input type="password" name="confirmedPassword" id="confirmPassword" onfocus="disableSubmit()" required>
+			<div id="pwMsg"></div>
+			<br><br>
+			<input type='button' id="checkInfo" name="confirm" value="Comfirm information" onclick="enableSubmit()">
+			<input type="submit" value="Submit" id="submit">
+			<br><br>
+			<p>Already have account?
+				<a href="login.html"> Login </a></p>
+		</form>
+	</div>
+
+</body>
+
+</html>

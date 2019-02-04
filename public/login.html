@@ -10,23 +10,24 @@
 </head>
 
 <body>
-	<div class="centerBox">
-		<h1 class="topicHeading"><a style="text-decoration: none;" href="index.html">
-				<i class="fas fa-home"></i> </a> Login </h1>
-		<form action="/login" method="POST">
-			User Name:
-			<input type="text" name="userName">
-			<br><br>
-			Password:
-			<input type="password" name="password">
-			<br><br>
-			<div>#msg#</div>
-			<input type="submit" value="login">
-			<br><br>
-			<p>Don't have account?
-				<a href="createAccount.html"> Create Account </a></p>
-		</form>
-	</div>
+
+	<main class="loginBG">
+		<header>Plan Your Tasks</header>
+		<section>
+			<div class="loginBox">
+				<h1 class="subheader"><a style="font-size: 30px;" href="index.html" class="link">
+						<i class="fas fa-home"></i></a> Login</h1>
+				<form autocomplete="off" action="/login" method="POST">
+					<input type="text" placeholder="username" class="textField" name="userName" required />
+					<input type="password" placeholder="password" class="textField" name="password" required />
+					<div class="msgHolder">#msg#</div>
+					<input type="submit" class="button" value="Login" />
+				</form>
+				<br>
+				<a href="createAccount.html" class="link">create an account</a>
+			</div>
+		</section>
+	</main>
 
 </body>
 

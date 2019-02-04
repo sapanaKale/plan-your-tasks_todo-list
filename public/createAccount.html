@@ -9,33 +9,36 @@
 	 crossorigin="anonymous">
 </head>
 
-<body class="createAccBG">
-	<div class="centerBox">
-		<h1 class="topicHeading"><a style="text-decoration: none;" href="index.html">
-				<i class="fas fa-home"></i>
-			</a> Create Account</h1>
-		<form action="/signUp" method="POST" onsubmit="return validatePassword()">
-			User Name:
-			<input type="text" name="userName" id="userName" onfocusout="validateUserName()" onfocus="removeErrMsg() && disableSubmit()" required>
-			<div id="unMsg"></div>
-			<br>
-			E-mail Id:
-			<input type="text" name="email" onfocus="disableSubmit()" required>
-			<br><br>
-			Password:
-			<input type="password" name="password" onfocus="disableSubmit()" id="password" required>
-			<br><br>
-			Confirm Password:
-			<input type="password" name="confirmedPassword" id="confirmPassword" onfocus="disableSubmit()" required>
-			<div id="pwMsg"></div>
-			<br><br>
-			<input type='button' id="checkInfo" name="confirm" value="Comfirm information" onclick="enableSubmit()">
-			<input type="submit" value="Submit" id="submit">
-			<br><br>
-			<p>Already have account?
-				<a href="login.html"> Login </a></p>
-		</form>
-	</div>
+<body>
+
+	<main class="loginBG">
+			<header>Plan Your Tasks</header>
+			<section>
+				<div class="loginBox" style = "height: 550px;">
+					<h1 class="subheader"><a style="font-size: 30px;" href="index.html" class="link">
+							<i class="fas fa-home"></i></a> Create Account </h1>
+					<form autocomplete="off" action="/signUp" method="POST" onsubmit="return validatePassword()">
+
+						<input type="text" placeholder="username" class="textField" name="userName" id="userName" onfocusout="validateUserName()" onfocus="removeErrMsg() && disableSubmit()" required />
+						<div id="unMsg"></div>
+
+						<input type="text" placeholder="email-id" class="textField" name="email" onfocus="disableSubmit()" required />
+
+						<input type="password" placeholder="password" class="textField" name="password" id="password" onfocus="disableSubmit()" required />
+
+						<input type="password" placeholder="confirm password" class="textField" name="confirmedPassword" id="confirmPassword" onfocus="disableSubmit()" required />
+						<div class="msgHolder" id="pwMsg"></div>
+
+						<input type='button' id="checkInfo" name="confirm" style = "cursor: pointer" onclick="enableSubmit()">
+
+						<input type="submit" class="button" value="Submit" id="submit" />
+
+					</form>
+					<br>
+					<a href="login.html" class="link"> login </a>
+				</div>
+			</section>
+		</main>
 
 </body>
 

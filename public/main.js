@@ -14,6 +14,7 @@ const removeErrMsg = function () {
 
 const enableSubmit = function () {
 	document.getElementById('submit').disabled = false;
+	document.getElementById("checkInfo").style.backgroundColor = "gray";
 };
 
 const validateUserName = function () {
@@ -62,7 +63,7 @@ const createDeleteOption = function () {
 const createEditOption = function () {
 	let editOption = document.createElement("i");
 	editOption.className = "fas fa-edit";
-	editOption.style.color = "blue";
+	editOption.style.color = "inherit";
 	editOption.style.float = "right";
 	editOption.style.paddingLeft = "20px";
 	editOption.onclick = editElement;

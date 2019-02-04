@@ -13,7 +13,7 @@ const generateToDoListHtml = function (listData) {
         </div>
         <div class="todo-button">
         <i onclick="deleteList()" class="fas fa-trash" style="cursor: pointer; margin: 0 3%"></i>
-          <a href="/todo/${list.title}"> <i class="fas fa-edit"></i> </a>
+          <a href="/todo/${list.title}"> <i style="color: rgb(16, 148, 165);" class="fas fa-edit"></i> </a>
         </div>
       </div>`
 		});

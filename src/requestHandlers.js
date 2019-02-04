@@ -14,6 +14,7 @@ const {
 	isErrorFileNotFound,
 	setCookie,
 	getCookie,
+	decrypt
 } = require('./serverUtil');
 
 const logRequest = function (req, res, next) {
@@ -91,11 +92,12 @@ const renderUserHomePage = function (req, res, next) {
 };
 
 const renderTodoEditor = function (req, res, next) {
-	const todoDetails = readArgs(req.body);
+	let { title, description } = readArgs(req.body);
+	[title, description] = [title, description].map(x => decrypt(x));
 	const userName = getCookie(req, "username");
 	const user = new User(userName);
-	user.initializeTodo(todoDetails);
-	const todo = new Todo(todoDetails.title, todoDetails.description)
+	user.initializeTodo({ title, description });
+	const todo = new Todo(title, description);
 	sendContent(todo.editor(), res);
 };
 
@@ -109,7 +111,7 @@ const updateList = function (req, res, next) {
 const renderTodoList = function (req, res, next) {
 	try {
 		const user = new User(getCookie(req, "username"));
-		const title = req.url.slice(6);
+		const title = req.url.slice(6).replace(/%20/g, ' ');
 		let { description, listItems } = user.getListData(title);
 		listItems = JSON.parse(listItems);
 		const todo = new Todo(title, description, listItems);

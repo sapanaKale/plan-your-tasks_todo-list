@@ -26,15 +26,6 @@ describe('readArgs', function () {
 app.use(readBody);
 app.use(logRequest);
 
-describe('GET /usersName', function () {
-	app.get('/usersName', renderUsersName);
-	it('responds with array of names', function (done) {
-		request(app)
-			.get('/usersName')
-			.expect(200, done);
-	});
-});
-
 describe('GET /loginPage.html', function () {
 	app.get('/loginPage.html', renderLogin);
 	it('responds with loginpage', function (done) {

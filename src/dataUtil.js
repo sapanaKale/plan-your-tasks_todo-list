@@ -17,7 +17,7 @@ const initialize = function (path) {
 	if (fs.existsSync(path)) {
 		return JSON.parse(getContent(path));
 	};
-	fs.writeFileSync(path, new Object);
+	fs.writeFileSync(path, JSON.stringify(new Object));
 	return JSON.parse(getContent(path));
 };
 

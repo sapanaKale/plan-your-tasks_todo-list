@@ -40,6 +40,10 @@ const getCookie = function(req, name){
 	return cookies[name];
 };
 
+const decrypt = function(content){
+	return unescape(content).replace(/\+/g, " ").trim();
+};
+
 module.exports = {
 	readArgs,
 	sendContent,
@@ -49,5 +53,6 @@ module.exports = {
 	getPath,
 	isErrorFileNotFound,
 	setCookie,
-	getCookie
+	getCookie,
+	decrypt
 };

@@ -9,6 +9,7 @@
 	text-align: right;
 	font-size: 60px;
 	margin-right: 5%;
+	color: rgb(49, 18, 18);
 }
 
 .mainDiv{
@@ -17,7 +18,7 @@
 	margin-top: 3%;
 	margin-left: 70%;
 	margin-right: 5%;
-	font-size: 20px;
+	font-size: 35px;
 }
 
 .border {
@@ -41,42 +42,117 @@
 .todoText {
 	margin-left: 68%;
 	margin-right: 5%;
-	margin-top: 8%;
+	margin-top: 4%;
 	font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 	font-size: 25px;
 	color: grey;
-	text-align: justify;
+  text-align: justify;
+  line-height: 2;
 }
 
 .homepageBG {
-	background-image: url("./images/todo6.jpg");
+	background-image: url("./images/todoBg.jpg");
 	background-size: cover;
 }
 
-.createNewTodo {
-	padding: 20px;
-	margin-left: 80%;
-	background-color: aquamarine;
-	border: 1px solid black;
-	margin-right: 3%;
-	font-size: 20px;
-}
-
 .userHomeHeading {
-	margin-top: 2%;
-	text-align: center;
-	font-size: 60px;
-	font-family: serif;
+  margin-top: 2%;
+	text-align: left;
+	/* font-size: 50px; */
+  font-family: sans-serif;
 }
 
 .centerBox {
-	text-align: center;
+  text-align: center;
 	background-color: aliceblue;
-	height: 450px;
+	height: 550px;
 	width: 500px;
-	margin: 10% auto;
-	}
+  margin: 5% auto;
+  font-size: 20px;
+  box-shadow: 8px 10px 30px;
+}
 
 .link{
-	text-underline-position: below;
+  text-underline-position: below;
+}
+
+.errMsg {
+  width:500px;
+  height:20px;
+  color: red;
+  padding-bottom: 20px;
+} 
+
+.createNewTodo {
+  padding: 20px;
+  border: 1px solid black;
+  margin-right: 3%;
+  font-size: 20px;
+  height: 300px;
+}
+
+.allTodos {
+  display: flex;
+  align-content: space-around;
+  flex-wrap: wrap;
+  width: 960px;
+  margin: 0 auto;
+}
+
+.userHomepage {
+  display: flex;
+  align-content: space-around;
+  padding-top: 30px;
+}
+
+.todo {
+  width: 30%;
+  background-color: ghostwhite;
+  margin-left: 3%;
+  border: 1px solid black;
+  margin-bottom: 30px;
+}
+
+.todo-title-date{
+  display: flex;
+  justify-content: space-between;
+}
+
+.todo-button {
+  display: flex;
+  flex-direction: row-reverse;
+  margin-bottom: 3%;
+  margin-right: 3%;
+}
+
+.list-item-button {
+  font-size: 30px;
+  cursor: pointer;
+}
+
+.my-todo {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgb(243, 151, 151);
+  height: 70px;
+  background-color: rgb(236, 231, 231);
+}
+
+.todo-items-div {
+  font-size: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.todo-editor {
+	text-align:center;
+	width:70%;
+	height:100%;
+	margin: auto;
+	box-shadow: 8px 10px 30px;
+	display: flex;
+	flex-direction: column;
 }

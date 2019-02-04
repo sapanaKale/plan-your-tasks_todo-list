@@ -6,36 +6,38 @@
 	<link rel="stylesheet" type="text/css" media="screen" href="/main.css" />
 	<script src="/main.js"></script>
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ"
-	 crossorigin="anonymous">
+	 crossorigin="anonymous" />
 </head>
 
 <body>
-	<h1 class="userHomeHeading"><i class="fas fa-clipboard-list"> My TODO's </i>
-	</h1>
-	<hr>
-	<div class="mainDiv" style="margin-left: 80%;">
-		<div style="text-align: right"> <i class="fas fa-user"></i> ##username## </div>
-		<form action="/logout" method="POST">
-			<button style="font-size: 15px" type="submit"> logout </button>
-		</form>
-		<br>
+		<div class="mainDiv" style="margin-left: 80%;">
+				<div style="text-align: right;">
+					<i class="fas fa-user"></i> ##username##
+				</div>
+				<form action="/logout" method="POST">
+					<button style="font-size: 15px; cursor: pointer;" type="submit">
+						logout
+					</button>
+				</form>
+				<br />
+			</div>
+	<h1 class="userHomeHeading"><i class="fas fa-clipboard-list"></i> My TODO's </h1>
+	<div class="userHomepage">
+		<div class="allTodos">##myLists##</div>
+		<div class="createNewTodo" id="newToDo">
+			<h3>Create new to-do</h3>
+			<form action="/todoEditor.html" method="POST">
+				Title:
+				<input style="font-size: 17px;" type="text" name="title" required />
+				<br><br>
+				Description:
+				<textarea style="font-size: 17px;" name="description" cols="20" rows="3"></textarea>
+				<br><br>
+				<input style="font-size: 12px;" type="submit" value="Add List"/>
+				<br><br>
+			</form>
+		</div>
 	</div>
-	<br><br>
-	<div class="createNewTodo" id="newToDo">
-		<h3>Create new to-do</h3>
-		<form action="/todoEditor.html" method="POST">
-			Title:
-			<input style="font-size: 17px;" type="text" name="title" required>
-			<br><br>
-			Description:
-			<textarea style="font-size: 17px;" name="description" cols="20" rows="3"></textarea>
-			<br><br>
-			<input style="font-size: 20px;" type="submit" value="Add List">
-			<br><br>
-		</form>
-	</div>
-	<br><br>
-	<div>##myLists##</div>
 </body>
 
 </html>

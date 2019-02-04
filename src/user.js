@@ -21,7 +21,7 @@ class User {
 		return Object.keys(usersDetails).includes(this.userName);
 	};
 
-	isNameAvailable(){
+	isNameAvailable() {
 		return !this.isValidUserName();
 	};
 
@@ -45,7 +45,7 @@ class User {
 
 	initializeTodo(todoDetails) {
 		const { title, description } = todoDetails;
-		usersData[this.userName].unshift({ title, description, listItems: "[]" });
+		usersData[this.userName].unshift({ title, description, listItems: "[]", date: new Date().toUTCString() });
 		updateUserData(JSON.stringify(usersData));
 	};
 
@@ -56,6 +56,9 @@ class User {
 	updateList(listTitle, listItems) {
 		const todoList = this.getListData(listTitle);
 		todoList.listItems = listItems;
+		let pending = JSON.parse(listItems).filter(x => x.status == "pending").length;
+		todoList.pending = pending;
+		todoList.done = JSON.parse(listItems).length - pending;
 		updateUserData(JSON.stringify(usersData));
 	};
 
@@ -65,8 +68,7 @@ class User {
 
 	getHomePage() {
 		const homePage = replaceContent(userHomePage, '##username##', this.userName);
-		const lists = this.getAlltodos();
-		const listsHtml = generateToDoListHtml(lists);
+		const listsHtml = generateToDoListHtml(usersData[this.userName]);
 		return replaceContent(homePage, '##myLists##', listsHtml);
 	};
 

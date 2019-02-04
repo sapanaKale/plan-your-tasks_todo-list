@@ -10,17 +10,20 @@
 </head>
 
 <body>
-	<h2>Title: ##title##</h2>
-	<h3>Description: ##description##</h3>
-	<div id="list">
-		<h2 style="margin:5px">My To Do List</h2>
-		<input type="text" id="myInput" placeholder="list items...">
-		<button onclick="addItems()">Add</button>
-		<ul id="myLI">
-			<div>##listItems##</div>
-		</ul>
+	<div class="todo-editor">
+		<h2 style="text-align: center">##title##</h2>
+		<h3 style="text-align:center">##description##</h3>
+		<div id="list">
+			<input type="text" id="myInput" placeholder="list items..." style="width: 60%; height: 25px; font-size: 15px;">
+			<button onclick="addItems()" style="width: 10%; height: 30px; font-size: 15px;">Add item</button>
+			<div style="overflow:scroll; height: 500px;">
+				<ul id="myLI" style="text-align:left;">
+					<div>##listItems##</div>
+			</div>
+		</div>
+		<a href="/userHomePage" style="text-decoration: none;" onclick="saveList()"><button style="width:10%; height:30px; font-size:20px;">Save
+				<i class="fas fa-save"> </i></button></a>
 	</div>
-	<a href="/userHomePage" style="text-decoration: none" onclick="saveList()"><button>Save <i class="fas fa-save"> </i></button></a>
 </body>
 
 </html>

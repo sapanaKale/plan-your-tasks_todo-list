@@ -44,18 +44,10 @@ const deleteElement = () => event.target.parentNode.remove();
 
 const editElement = function () {
 	let textToEdit = event.target.parentNode.innerText;
-	event.target.parentNode.innerHTML =
-		`<textarea cols="30" rows="2" id="editedInput" 
-		style="font-size:20px"> ${textToEdit} </textarea>
-		<button onclick="updateItem()">Done</button>`;
-};
-
-const updateItem = function () {
-	let item = document.getElementById('editedInput').value;
-	event.target.parentNode.innerHTML =
-		`<i style="color: blue; float: right; padding-left: 20px;" onclick="editElement()" class="fas fa-edit"></i>
-		<i style="color: red; float: right;" onclick="deleteElement()" class="fas fa-eraser"></i>
-		<li style="text-decoration: none;" onclick="changeStatus()">${item}</li>`;
+	let inputBox = document.getElementById('myInput');
+	inputBox.value = textToEdit;
+	inputBox.focus();
+	event.target.parentNode.remove();
 };
 
 const createDeleteOption = function () {
@@ -79,8 +71,10 @@ const createEditOption = function () {
 
 const createItemsDiv = function () {
 	let itemDiv = document.createElement("div");
-	itemDiv.style.width = "50%";
-	itemDiv.style.fontSize = "30px";
+	itemDiv.style.width = "70%";
+	itemDiv.style.fontSize = "25px";
+	itemDiv.style.margin = 'auto';
+	itemDiv.style.padding = '5px';
 	itemDiv.appendChild(createEditOption());
 	itemDiv.appendChild(createDeleteOption());
 	return itemDiv;
@@ -89,6 +83,8 @@ const createItemsDiv = function () {
 const createListItem = function () {
 	let item = document.createElement("li");
 	item.innerText = document.getElementById("myInput").value;
+	item.style.width = "85%";
+	item.style.textAlign = "justify";
 	item.onclick = changeStatus;
 	return item;
 };
@@ -98,6 +94,7 @@ const addItems = function () {
 	let itemDiv = createItemsDiv();
 	itemDiv.appendChild(createListItem());
 	itemsList.appendChild(itemDiv);
+	document.getElementById('myInput').value = '';
 };
 
 const statusDone = function (item) {
@@ -116,7 +113,7 @@ const changeStatus = function () {
 };
 
 const deleteList = function () {
-	const listHolder = event.target.parentNode;
+	const listHolder = event.target.parentNode.parentNode;
 	const listName = listHolder.firstChild.nextSibling.innerText;
 	fetch('/deleteList', {
 		method: 'POST',

@@ -19,7 +19,7 @@ const {
 	validateUserName } = require('./requestHandlers');
 
 app.use(readBody);
-app.use(logRequest);
+// app.use(logRequest);
 app.get('/', renderHomePage);
 app.post('/validateUserName', validateUserName);
 // app.get('/usersName', renderUsersName);

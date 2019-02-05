@@ -1,5 +1,5 @@
-const App = require('./createApp');
-const app = new App();
+const express = require('express');
+const app = express();
 
 const {
 	readBody,
@@ -30,6 +30,6 @@ app.get('/userHomePage', renderUserHomePage);
 app.get(/\/todo\//, renderTodoList);
 app.post('/deleteList', deleteList);
 app.post('/logout', logOut);
-app.use(renderFile);
+app.use(express.static("public"));
 
-module.exports = app.handleRequest.bind(app);
+module.exports = app;

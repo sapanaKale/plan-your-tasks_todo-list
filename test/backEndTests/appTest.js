@@ -1,16 +1,7 @@
 const chai = require('chai');
 const request = require('supertest');
-const express = require('express');
 
-const app = express();
-const {
-	logRequest,
-	readBody,
-	renderLogin,
-	renderUsersName,
-	renderHomePage,
-	signUp
-} = require('../../src/requestHandlers');
+const app = require('../../src/app.js');
 
 const { readArgs } = require('../../src/serverUtil')
 
@@ -23,20 +14,15 @@ describe('readArgs', function () {
 	});
 });
 
-app.use(readBody);
-app.use(logRequest);
-
-describe('GET /loginPage.html', function () {
-	app.get('/loginPage.html', renderLogin);
+describe('GET /login.html', function () {
 	it('responds with loginpage', function (done) {
 		request(app)
-			.get('/loginPage.html')
+			.get('/login.html')
 			.expect(200, done);
 	});
 });
 
 describe('GET /', function () {
-	app.get('/', renderHomePage);
 	it('responds with homepage', function (done) {
 		request(app)
 			.get('/')
@@ -45,7 +31,6 @@ describe('GET /', function () {
 });
 
 describe('POST /signUp', function () {
-	app.post('/signUp', signUp);
 	it('responds with loginpage html', function (done) {
 		request(app)
 			.post('/signUp')

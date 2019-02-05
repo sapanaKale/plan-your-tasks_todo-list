@@ -6,23 +6,32 @@
 	<link rel="stylesheet" type="text/css" media="screen" href="/main.css" />
 	<script src="/main.js"></script>
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ"
-	 crossorigin="anonymous">
+	 crossorigin="anonymous" />
 </head>
 
 <body>
-	<div class="todo-editor">
-		<h2 style="text-align: center">##title##</h2>
-		<h3 style="text-align:center">##description##</h3>
-		<div id="list">
-			<input type="text" id="myInput" placeholder="list items..." style="width: 60%; height: 25px; font-size: 15px;">
-			<button onclick="addItems()" style="width: 10%; height: 30px; font-size: 15px;">Add item</button>
-			<div style="overflow:scroll; height: 500px;">
-				<ul id="myLI" style="text-align:left;">
-					<div>##listItems##</div>
+	<div class="background">
+		<div class="todo-editor">
+			<h2 style="text-align: center">##title##</h2>
+			<h3 style="text-align:center">##description##</h3>
+			<div id="list">
+				<input type="text" id="myInput" placeholder="list items..." style="width: 60%; height: 25px; font-size: 20px;"
+				 class="textField" />
+				<button onclick="addItems()" style="width: 10%; height: 30px;" class="button">
+					Add item
+				</button>
+				<div style="overflow:scroll; height: 430px;">
+					<ul id="myLI" style="text-align:left;">##listItems##</ul>
+				</div>
+			</div>
+			<div style = "display: flex; justify-content: space-between">
+				<a href="/userHomePage" style="text-decoration: none;"><button class="button" style = "margin-top: 10px; width: 420px; font-size: 20px;">
+						Cancel </button></a>
+				<a href="/userHomePage" style="text-decoration: none;" onclick="saveList()"><button class="button" style = "margin-top: 10px; width: 430px; font-size: 22px;">Save
+						<i class="fas fa-save">
+						</i></button></a>
 			</div>
 		</div>
-		<a href="/userHomePage" style="text-decoration: none;" onclick="saveList()"><button style="width:10%; height:30px; font-size:20px;">Save
-				<i class="fas fa-save"> </i></button></a>
 	</div>
 </body>
 

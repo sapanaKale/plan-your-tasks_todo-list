@@ -1,0 +1,44 @@
+.formLink{
+	font-size: 25px;
+	padding: 10px;
+	text-decoration:	 none;
+	box-shadow: 0px 0px 50px grey;
+	background-color: rgb(115, 159, 167);
+	color: whitesmoke;
+	font-weight: lighter;
+}
+
+.formLink:hover {
+	background-color: rgb(112, 183, 192);
+}
+
+.mainHeading{
+	text-align: left;
+	font-size: 90px;
+	color: rgb(71, 50, 50);
+	margin-left: 2%;
+}
+
+.mainDiv{
+	display: flex; 
+	justify-content: space-around;
+	margin-right: 70%;
+	font-size: 35px;
+	margin-left: 1%;
+}
+
+.todoText {
+	margin-right: 68%;
+	margin-left: 2%;
+	margin-top: 4%;
+	font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+	font-size: 25px;
+	color: rgb(19, 6, 6);
+	text-align: justify;
+	line-height: 2;
+}
+
+.homepageBG {
+	background-image: url("./images/todobg22.jpg");
+	background-size: cover;
+}

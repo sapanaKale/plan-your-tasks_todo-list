@@ -21,11 +21,11 @@ const generateToDoListHtml = function (listData) {
 };
 
 const getEditOption = function () {
-	return `<i style="color: blue; float: right; padding-left: 20px;" onclick="editElement()" class="fas fa-edit"></i>`
+	return `<i style="color: rgb(16, 148, 165); float: right; padding-left: 20px;" onclick="editElement()" class="fas fa-edit"></i>`
 };
 
 const getDeleteOption = function () {
-	return `<i style="color: red; float: right;" onclick="deleteElement()" class="fas fa-eraser"></i>`;
+	return `<i style="color: rgb(168, 85, 85); float: right;" onclick="deleteElement()" class="fas fa-eraser"></i>`;
 };
 
 const getItemStyle = function (itemsList, item) {

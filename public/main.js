@@ -54,7 +54,7 @@ const editElement = function () {
 const createDeleteOption = function () {
 	let deleteItem = document.createElement("i");
 	deleteItem.className = "fas fa-eraser";
-	deleteItem.style.color = "red";
+	deleteItem.style.color = "rgb(168, 85, 85)";
 	deleteItem.style.float = "right";
 	deleteItem.onclick = deleteElement;
 	return deleteItem;
@@ -63,7 +63,7 @@ const createDeleteOption = function () {
 const createEditOption = function () {
 	let editOption = document.createElement("i");
 	editOption.className = "fas fa-edit";
-	editOption.style.color = "inherit";
+	editOption.style.color = "rgb(16, 148, 165)";
 	editOption.style.float = "right";
 	editOption.style.paddingLeft = "20px";
 	editOption.onclick = editElement;

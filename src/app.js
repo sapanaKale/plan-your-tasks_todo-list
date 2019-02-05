@@ -6,7 +6,6 @@ const {
 	logRequest,
 	renderFile,
 	renderHomePage,
-	// renderUsersName,
 	signUp,
 	renderLogin,
 	login,
@@ -19,10 +18,9 @@ const {
 	validateUserName } = require('./requestHandlers');
 
 app.use(readBody);
-// app.use(logRequest);
+app.use(logRequest);
 app.get('/', renderHomePage);
 app.post('/validateUserName', validateUserName);
-// app.get('/usersName', renderUsersName);
 app.post('/signUp', signUp);
 app.get('/login.html', renderLogin);
 app.post('/login', login);

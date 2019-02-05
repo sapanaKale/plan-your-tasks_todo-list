@@ -14,10 +14,12 @@ const updateUserDetails = updateData.bind(null, './private/usersDetails.json');
 const updateUserData = updateData.bind(null, './private/usersData.json');
 
 const initialize = function (path) {
+	if(!fs.existsSync('./private')){
+		fs.mkdirSync('./private');
+	};
 	if (fs.existsSync(path)) {
 		return JSON.parse(getContent(path));
 	};
-	fs.mkdirSync('private');
 	fs.writeFileSync(path, JSON.stringify(new Object));
 	return JSON.parse(getContent(path));
 };

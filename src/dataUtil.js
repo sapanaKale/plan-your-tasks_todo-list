@@ -17,6 +17,7 @@ const initialize = function (path) {
 	if (fs.existsSync(path)) {
 		return JSON.parse(getContent(path));
 	};
+	fs.mkdirSync('private');
 	fs.writeFileSync(path, JSON.stringify(new Object));
 	return JSON.parse(getContent(path));
 };

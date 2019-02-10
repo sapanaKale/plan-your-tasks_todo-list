@@ -14,14 +14,15 @@
 
 .overflow {
 	height: 450px;
-	overflow: scroll;
+  overflow: scroll;
+  width: 70%;
 }
 
 .createNewTodo {
 	display: flex;
 	flex-direction: column;
 
-	width: 400px;
+	width: 27%;
 	height: 450px;
 	text-align: center;
 	margin-right: 3%;
@@ -36,14 +37,16 @@
   display: flex;
   align-content: space-around;
   flex-wrap: wrap;
-  width: 960px;
-	margin: 0 auto;
+  width: 95%;
+  margin: 0 auto;
+  margin-right: 4%;
 }
 
 .userHomepage {
   display: flex;
   justify-content: space-between;
   padding-top: 80px;
+  width: 100%;
 }
 
 .todo {

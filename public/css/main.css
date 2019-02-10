@@ -1,6 +1,8 @@
 .background {
 	background-image: url('../images/bg2.png');
-	background-size: cover;
+  background-size: cover;
+  height: 100%;
+  width: 100%;
 }
 
 .msgHolder {

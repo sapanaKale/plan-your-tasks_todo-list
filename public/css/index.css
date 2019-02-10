@@ -20,11 +20,10 @@
 }
 
 .mainDiv{
-	display: flex; 
+  display: flex;
+  width: 35%;
 	justify-content: space-around;
-	margin-right: 70%;
 	font-size: 35px;
-	margin-left: 1%;
 }
 
 .todoText {

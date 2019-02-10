@@ -43,7 +43,7 @@ const validateUserName = function (req, res, next) {
 }
 
 const signUp = function (req, res, next) {
-	const { userName, email, password, confirmedPassword } = readArgs(req.body);
+	const { userName, email, password} = readArgs(req.body);
 	const user = new User(userName)
 	user.register(email, password);
 	user.initializeData();

@@ -122,7 +122,6 @@ module.exports = {
 	readBody,
 	logOut,
 	signUp,
-	renderFile,
 	renderHomePage,
 	renderLogin,
 	renderUserHomePage,

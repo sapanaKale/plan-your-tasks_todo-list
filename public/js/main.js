@@ -115,7 +115,7 @@ const changeStatus = function () {
 
 const deleteList = function () {
 	const listHolder = event.target.parentNode.parentNode;
-	const listName = listHolder.firstChild.nextSibling.innerText;
+	const listName = listHolder.firstChild.nextSibling.innerText.split('\n')[0];
 	fetch('/deleteList', {
 		method: 'POST',
 		body: `title=${listName}`

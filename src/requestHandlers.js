@@ -8,10 +8,7 @@ const {
 	readArgs,
 	sendContent,
 	sendNotFound,
-	sendServerError,
 	redirect,
-	getPath,
-	isErrorFileNotFound,
 	setCookie,
 	getCookie,
 	decrypt
@@ -30,20 +27,6 @@ const readBody = function (req, res, next) {
 	req.on('end', () => {
 		req.body = content;
 		next();
-	});
-};
-
-const renderFile = function (req, res) {
-	const path = getPath(req.url);
-	fs.readFile(path, (err, content) => {
-		try {
-			sendContent(content, res);
-		} catch (error) {
-			if (isErrorFileNotFound(err.code)) {
-				return sendNotFound(res);
-			}
-			sendServerError(res);
-		};
 	});
 };
 

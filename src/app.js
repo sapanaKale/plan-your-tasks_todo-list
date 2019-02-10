@@ -4,7 +4,6 @@ const app = express();
 const {
 	readBody,
 	logRequest,
-	renderFile,
 	renderHomePage,
 	signUp,
 	renderLogin,

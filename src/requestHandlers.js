@@ -1,5 +1,3 @@
-const fs = require('fs');
-
 const User = require('./user');
 const Todo = require('./todo');
 const { homePage, loginPageWithErr, initialLoginPage } = require('./constants');
